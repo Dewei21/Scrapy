@@ -1,0 +1,18 @@
+ 1 import scrapy
+ 2 from luoo.items import LuooItem
+ 3 
+ 4 class LuooSpider(scrapy.Spider):
+ 5     name = "luoo"
+ 6     allowed_domains = ["luoo.net"]
+ 7     start_urls = []
+ 8     for i in range(750,763):
+ 9         url = 'http://www.luoo.net/music/%s'%(str(i))
+10         start_urls.append(url)
+11 
+12     def parse(self, response):
+13         item = LuooItem()
+14         item['url'] = response.url
+15         item['title'] = response.xpath('//span[@class="vol-title"]/text()').extract()
+16         item['pic'] = response.xpath('//img[@class="vol-cover"]/@src').extract()
+17         item['desc'] = response.xpath('//div[@class="vol-desc"]/text()').extract()
+18         return item
